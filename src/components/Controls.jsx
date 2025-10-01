@@ -1,6 +1,5 @@
-import React from "react";
-
 export default function Controls({
+    algorithms,
     onGenerate,
     onSort,
     onChangeSize,
@@ -9,6 +8,9 @@ export default function Controls({
     onStop,
     isRunning,
 }) {
+
+    const formatAlgoName = (key) => key.charAt(0).toUpperCase() + key.slice(1) + " Sort";
+
     return (
         <div className="flex flex-wrap gap-4 mt-6 items-center justify-center">
             {/* Generate Array */}
@@ -30,11 +32,13 @@ export default function Controls({
                 <option value="" disabled>
                     Select Algorithm
                 </option>
-                <option value="bubble">Bubble Sort</option>
-                <option value="selection">Selection Sort</option>
-                <option value="insertion">Insertion Sort</option>
-                <option value="merge">Merge Sort</option>
-                <option value="quick">Quick Sort</option>
+                {
+                    Object.keys(algorithms)?.map((algorithm)=>{
+                        return(
+                            <option key={algorithm} value={algorithm}>{formatAlgoName(algorithm)}</option>                  
+                        )
+                    })
+                }
             </select>
 
             {/* Array Size Slider */}

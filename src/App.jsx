@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Visualizer from "./components/Visualizer";
 import Controls from "./components/Controls";
 
@@ -13,10 +13,18 @@ export default function App() {
   const [steps, setSteps] = useState([]);
   const [stepIndex, setStepIndex] = useState(0);
   const [activeIndices, setActiveIndices] = useState([]);
-  const [speed, setSpeed] = useState(200); // lower = faster
+  const [speed, setSpeed] = useState(200); 
   const [isRunning, setIsRunning] = useState(false);
   const [isSorted, setIsSorted] = useState(false);
   const [selectedAlgo, setSelectedAlgo] = useState("");
+
+  const algorithms={
+    bubble: bubbleSort,
+    selection: selectionSort,
+    insertion: insertionSort,
+    merge: mergeSort,
+    quick: quickSort,
+  }
 
   // Generate random array
   const generateArray = (size = 20) => {
@@ -31,13 +39,7 @@ export default function App() {
   // Prepare sorting steps for selected algorithm
   const prepareSort = (algorithm) => {
     setSelectedAlgo(algorithm);
-    let result = [];
-    if (algorithm === "bubble") result = bubbleSort(array);
-    else if (algorithm === "selection") result = selectionSort(array);
-    else if (algorithm === "insertion") result = insertionSort(array);
-    else if (algorithm === "merge") result = mergeSort(array);
-    else if (algorithm === "quick") result = quickSort(array);
-
+    let result=algorithms[algorithm]?.(array) || [];
     setSteps(result);
     setStepIndex(0);
     setIsSorted(false);
@@ -87,6 +89,7 @@ export default function App() {
       <h1 className="text-2xl font-bold my-4">SortFlow - Sorting Visualizer</h1>
       <Visualizer array={array} activeIndices={activeIndices} isSorted={isSorted} />
       <Controls
+        algorithms={algorithms}
         onGenerate={() => generateArray(20)}
         onSort={prepareSort}
         onChangeSize={(size) => generateArray(size)}
